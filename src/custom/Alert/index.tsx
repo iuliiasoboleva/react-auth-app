@@ -2,28 +2,26 @@ import React from 'react';
 import styles from './styled.module.css';
 
 interface AlertProps {
-  message: string;
-  onClose: () => void;
+    message: string;
+    onClose: () => void;
 }
 
 const Alert: React.FC<AlertProps> = ({ message, onClose }) => {
-  return (
-    <div className={styles.container}>
-      <div className={styles.icon}>
-        {/* Здесь можно вставить SVG-код или импортировать SVG-иконку */}
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 7H13V13H11V7ZM11 15H13V17H11V15Z" fill="#f00"/>
-        </svg>
-      </div>
-      <div className={styles.message}>{message}</div>
-      <button className={styles.closeButton} onClick={onClose}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M6 6L18 18" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </button>
-    </div>
-  );
+    return (
+        <div className={styles.container}>
+            <div className={styles.icon}>
+                <svg width="27" height="23" viewBox="0 0 27 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.6298 0.160339C8.12193 0.637176 6.8652 2.08289 5.72135 4.49265C2.44463 5.44528 0.280452 8.78272 0.771875 12.3979C0.864644 13.0803 1.04903 13.7284 1.30522 14.3292C2.28084 16.8579 5.29946 21.2048 13.4959 22.109C11.4271 20.4365 10.5583 18.6382 10.4667 18.3845L20.2237 17.0582C20.2418 17.0557 20.2593 17.0542 20.2764 17.0527C20.2927 17.0512 20.3087 17.0498 20.3246 17.0476C24.1329 16.5299 26.7836 12.8978 26.2449 8.93525C25.7063 4.9727 22.1822 2.17992 18.3739 2.69759C18.2617 2.71285 18.1528 2.73079 18.0443 2.7518C16.2978 0.772504 14.1333 -0.179974 11.6298 0.160339ZM13.7285 7.13863C13.5478 6.44406 12.8416 6.0345 11.9991 6.25365C11.1567 6.47281 10.7396 7.17457 10.6756 8.08111L8.42689 8.36943C8.34429 6.61113 9.38705 4.85673 11.4932 4.30885C13.5292 3.77923 15.4713 4.90551 15.8687 6.43357C16.2434 7.87394 15.5638 8.61019 14.9148 9.31317C14.4059 9.86445 13.9158 10.3953 13.968 11.2291L12.1427 11.704C11.7614 10.2383 12.4543 9.43388 13.0497 8.74265C13.4983 8.22189 13.8915 7.76535 13.7285 7.13863ZM13.9226 14.8005C13.2908 14.9649 12.6728 14.6065 12.5102 13.9814C12.3476 13.3563 12.7126 12.7422 13.3444 12.5779C13.9763 12.4135 14.5942 12.7719 14.7568 13.397C14.9194 14.0221 14.5545 14.6361 13.9226 14.8005Z" fill="#FFA31A" />
+                </svg>
+            </div>
+            <div className={styles.message}>{message}</div>
+            <button className={styles.closeButton} onClick={onClose}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.99999 7.05732L11.3 3.75732L12.2427 4.69999L8.94266 7.99999L12.2427 11.3L11.3 12.2427L7.99999 8.94266L4.69999 12.2427L3.75732 11.3L7.05732 7.99999L3.75732 4.69999L4.69999 3.75732L7.99999 7.05732Z" fill="#BBBAC2" />
+                </svg>
+            </button>
+        </div>
+    );
 };
 
 export default Alert;

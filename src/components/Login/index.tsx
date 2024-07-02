@@ -7,65 +7,86 @@ import { auth } from '../../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import Input from '../../custom/Input';
 import Button from '../../custom/Button';
+import Alert from '../../custom/Alert';
 import styles from './styled.module.css';
 
 interface IFormInput {
-  email: string;
-  password: string;
+    email: string;
+    password: string;
 }
 
 const Login: React.FC = () => {
-  const { register, handleSubmit, setError, formState: { errors } } = useForm<IFormInput>();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+    const { register, handleSubmit, setError, formState: { errors } } = useForm<IFormInput>();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
+    const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const onSubmit: SubmitHandler<IFormInput> = async data => {
-    setLoading(true);
-    const { email, password } = data;
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      dispatch(setUser(email));
-      navigate('/profile');
-    } catch (error: any) {
-      if (error.code === 'auth/wrong-password') {
-        setError('password', {
-          type: 'manual',
-          message: 'Incorrect password. Make sure it contains at least 6 characters.'
-        });
-      } else if (error.code === 'auth/user-not-found') {
-        setError('email', {
-          type: 'manual',
-          message: 'User not found'
-        });
-      } else {
-        console.error('Error signing in user:', error);
-      }
-      setLoading(false);
-    }
-  };
+    const onSubmit: SubmitHandler<IFormInput> = async data => {
+        setLoading(true);
+        const { email, password } = data;
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            dispatch(setUser(email));
+            navigate('/profile');
+        } catch (error: any) {
+            handleAuthErrors(error);
+            setLoading(false);
+        }
+    };
 
-  return (
-    <div className={styles.container}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          label="Email"
-          error={errors.email?.message}
-          register={register("email", { required: 'Email is required' })}
-        />
-        <Input
-          label="Password"
-          error={errors.password?.message}
-          type="password"
-          register={register("password", { required: 'Password is required', minLength: { value: 6, message: 'Password must be at least 6 characters long' } })}
-        />
-        <Button text="Login" loading={loading} />
-      </form>
-      <p>
-        Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
-      </p>
-    </div>
-  );
+    const handleAuthErrors = (error: any) => {
+        switch (error.code) {
+            case 'auth/wrong-password':
+                setError('password', {
+                    type: 'manual',
+                    message: 'Неверный пароль. Пароль должен содержать не менее 6 символов.'
+                });
+                break;
+            case 'auth/user-not-found':
+                setError('email', {
+                    type: 'manual',
+                    message: 'Пользователь не найден'
+                });
+                break;
+            case 'auth/invalid-credential':
+                setError('email', {
+                    type: 'manual',
+                    message: 'Неверные данные. Проверьте email или пароль.'
+                });
+                break;
+            case 'auth/too-many-requests':
+                setAlertMessage('Слишком много попыток входа. Попробуйте позже.');
+                break;
+            default:
+                setAlertMessage('Ошибка. Попробуйте позже.');
+                break;
+        }
+    };
+
+    return (
+        <div className={styles.container}>
+            <h3 className={styles.title}>Авторизация</h3>
+            {alertMessage && <Alert message={alertMessage} onClose={() => setAlertMessage(null)} />}
+            <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+                <Input
+                    label="Email"
+                    error={errors.email?.message}
+                    register={register("email", { required: 'Необходимо ввести email' })}
+                />
+                <Input
+                    label="Пароль"
+                    error={errors.password?.message}
+                    type="password"
+                    register={register("password", { required: 'Необходимо ввести пароль', minLength: { value: 6, message: 'Пароль должен содержать не менее 6 символов' } })}
+                />
+                <Button text="Авторизоваться" loading={loading} />
+            </form>
+            <p className={styles.text}>
+                Ещё не зарегистрированы? <Link to="/register">Зарегистрироваться</Link>
+            </p>
+        </div>
+    );
 };
 
 export default Login;

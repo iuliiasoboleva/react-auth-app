@@ -8,19 +8,17 @@ import { auth } from './firebaseConfig';
 import Login from './components/Login';
 import Registration from './components/Registration';
 import Profile from './components/Profile';
+import './index.css';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    console.log('Setting up auth state change listener'); // Лог перед установкой слушателя состояния аутентификации
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log('User is signed in:', user.email); // Лог при наличии аутентифицированного пользователя
         dispatch(setUser(user.email!));
       } else {
-        console.log('No user is signed in'); // Лог при отсутствии аутентифицированного пользователя
         dispatch(clearUser());
       }
     });
